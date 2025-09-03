@@ -1,1 +1,53 @@
+name: Deploy to K8s
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  buid-and-deploy:
+    runs-on: 'self-hosted' # if has more than 1 use -> ['self-hosted', 'mycustom']
+    steps:
+      - name: Deploy to Kubernates
+        run: |
+        # command written in .yml
+        $yamlContent = @"
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: eshop-web-deployment
+        spec:
+          replicas: 3 # Guarantee creating 3 pods
+          selector:
+            matchLabels:
+              app: eshop-web
+        template:
+          metadata:
+            labels:
+              app: eshop-web
+        spec:
+          containers:
+            - name: eshop-web-container
+              image: jrpp/eshopweb-k8s:1.0
+              ports:
+                - containerPort: 3000
+
+        --- # to indicate that this is different deployment "deploy separater"
+
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: eshop-web-service
+        spec:
+          selector:
+            app: eshop-web
+          ports:
+            - protocol: TCP
+              port: 80
+              targetPort: 3000
+          type: LoadBalancer # Allow access from external
+        "@
+
+        $yamlContent | Out-File-FilePath deployment.yamlContent
+        kubectl apply -f deployment.yaml
