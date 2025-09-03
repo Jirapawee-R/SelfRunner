@@ -18,7 +18,7 @@ jobs:
           metadata:
             name: eshop-web-deployment
           spec:
-            replicas: 3 # Guarantee creating 3 pods
+            replicas: 3
             selector:
               matchLabels:
                 app: eshop-web
@@ -33,7 +33,7 @@ jobs:
                 ports:
                   - containerPort: 3000
 
-          --- # to indicate that this is different deployment "deploy separater"
+          ---
 
           apiVersion: v1
           kind: Service
