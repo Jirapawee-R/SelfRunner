@@ -49,5 +49,5 @@ jobs:
             type: LoadBalancer 
           "@
 
-          $yamlContent | Out-File-FilePath deployment.yaml
+          $yamlContent | Out-File -FilePath deployment.yaml
           kubectl apply -f deployment.yaml
