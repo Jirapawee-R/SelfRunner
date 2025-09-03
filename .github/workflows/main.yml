@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Deploy to Kubernates
         run: |
-          # command written in .yml
           $yamlContent = @"
           apiVersion: apps/v1
           kind: Deployment
